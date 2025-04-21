@@ -1,0 +1,25 @@
+version: '3.8' 
+services:
+  backend:
+    image: adityahub2255/backendai 
+    ports:
+      - "3000:3000" 
+    environment:
+      - CLIENT_URL=http://frontend:5173 
+    networks:
+      - app_network 
+    container_name: backend 
+
+  localhost:
+    image: adityahub2255/aditya-ai 
+    ports:
+      - "5173:5173" 
+    networks:
+      - app_network
+    depends_on: 
+      - backend
+    container_name: frontend 
+
+networks:
+  app_network: 
+    driver: bridge 

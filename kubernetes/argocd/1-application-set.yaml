@@ -1,0 +1,21 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: openai
+  namespace: argocd
+spec:
+  destination:
+    name: ''
+    namespace: default
+    server: 'https://kubernetes.default.svc'
+  source:
+    path: openai
+    repoURL: https://github.com/ADITYA1234556/FULLSTACK_PERSONAL_AI_ASSISTANT.git
+    targetRevision: HEAD
+    directory: 
+      recurse: true
+  project: openai
+  syncPolicy:
+    automated:
+      prune: false
+      selfHeal: true

@@ -1,0 +1,75 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: backend
+  labels:
+    app: backend
+spec:
+  selector:
+    matchLabels:
+      app: backend
+  template:
+    metadata:
+      labels:
+        app: backend
+    spec:
+      containers:
+      - name: backend
+        image: adityahub2255/backendai
+        ports:
+        - containerPort: 3000
+          name: backendport
+        command:
+        - "npm"
+        args:
+        - "start"
+        env:
+        - name: IMAGE_KIT_ENDPOINT
+          value: "https://ik.imagekit.io/aditya2255"
+        - name: IMAGE_KIT_PUBLIC_KEY
+          valueFrom:
+            secretKeyRef:
+              name: image-kit
+              key: public-key
+        - name: IMAGE_KIT_PRIVATE_KEY
+          valueFrom:
+            secretKeyRef:
+              name: image-kit
+              key: private-key
+        - name: CLIENT_URL
+          value: "https://openai.adityaitc.theaditya.co.uk"
+        - name: GOOGLE_API_KEY
+          valueFrom:
+            secretKeyRef:
+              name: google
+              key: apikey
+        - name: MONGO
+          valueFrom:
+            secretKeyRef:
+              name: mongo
+              key: dbconnect
+        - name: CLERK_PUBLISHABLE_KEY
+          valueFrom:
+              secretKeyRef:
+                name: clerk
+                key: publish-key
+        - name: CLERK_SECRET_KEY
+          valueFrom:
+              secretKeyRef:
+                name: clerk
+                key: secret-key
+
+      imagePullSecrets:
+      - name: dockerlogin
+--- 
+apiVersion: v1
+kind: Service
+metadata:
+  name: backend
+spec:
+  selector:
+    app: backend
+  ports:
+    - protocol: TCP
+      port: 3000
+      targetPort: backendport

@@ -1,0 +1,21 @@
+apiVersion: argoproj.io/v1alpha1
+kind: AppProject
+metadata:
+  name: openai
+  namespace: argocd
+spec:
+  description: openai app project
+
+  # Allow deployments to this namespace
+  destinations:
+    - namespace: default
+      server: https://kubernetes.default.svc
+
+  # Allow this Git repo
+  sourceRepos:
+    - "*"
+
+  # Optional: allow all cluster resources
+  clusterResourceWhitelist:
+    - group: '*'
+      kind: '*'

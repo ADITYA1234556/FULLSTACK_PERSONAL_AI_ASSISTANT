@@ -1,0 +1,60 @@
+--- 
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: frontend
+  labels:
+    app: frontend
+spec:
+  selector:
+    matchLabels:
+      app: frontend
+  template:
+    metadata:
+      labels:
+        app: frontend
+    spec:
+      StrategyType: RollingUpdate
+      containers:
+      - name: frontend
+        image: adityahub2255/aditya-ai
+        ports:
+        - containerPort: 5173
+          name: frontendport
+        command: 
+        - "npm"
+        args:
+        - "run"
+        - "dev"
+        env:
+        - name: VITE_API_URL
+          value: "https://backend.adityaitc.theaditya.co.uk"
+        - name: VITE_IMAGE_KIT_ENDPOINT
+          value: "https://ik.imagekit.io/aditya2255"
+        - name: VITE_IMAGE_PUBLIC_KEY
+          valueFrom:
+              secretKeyRef:
+                name: image-kit
+                key: public-key
+        - name: VITE_GEMINI_PUBLIC_KEY
+          valueFrom:
+            secretKeyRef:
+              name: gemini
+              key: public-key
+        - name: VITE_CLERK_PUBLISHABLE_KEY
+          valueFrom:
+              secretKeyRef:
+                name: clerk
+                key: publish-key       
+--- 
+apiVersion: v1
+kind: Service
+metadata:
+  name: frontend
+spec:
+  selector:
+    app: frontend
+  ports:
+    - protocol: TCP
+      port: 5173
+      targetPort: frontendport
