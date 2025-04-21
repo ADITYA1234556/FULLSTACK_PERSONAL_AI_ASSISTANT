@@ -22,12 +22,8 @@ const NewPrompt = ({ data }) => {
     // TO KEEP THE HISTORY OF THE CHAT
     const chat = model.startChat({
     history: [
-        {
-            role: "model",
-            parts: [{ text: "Hello! I'm here to help you with your queries. Ask me anything." }],
-            role: "user",
-            parts: [{ text: "Hello! Can you help me with my query?"  }]
-        },
+        {role: "user", parts: [{ text: "Hello! I'm here to help you with your queries. Ask me anything." }]},
+        {role: "model", parts: [{ text: "Hello! Can you help me with my query?"  }]},
     ],
     generationConfig: {
         // maxOutputTokens: 100,

@@ -35,3 +35,7 @@ backend/node_modules
 #INGORE PACKAGE-LOCK.JSON
 client/package-lock.json
 backend/package-lock.json
+
+#IGNORE PASSWORDS
+passwords
+PASSWORDS-FOLDER

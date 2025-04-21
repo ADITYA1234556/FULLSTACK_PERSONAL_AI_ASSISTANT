@@ -9,12 +9,29 @@ import { ClerkExpressRequireAuth } from "@clerk/clerk-sdk-node";
 const port = process.env.PORT || 3000;
 const app = express();
 
-app.use(
-  cors({
-    origin: process.env.CLIENT_URL,
-    credentials: true,
-  })
-);
+const allowedOrigins = [
+  'http://localhost:5173',   // For development on your host machine
+  'http://frontend:5173',  // For communication from the frontend container
+  'https://openai.adityaitc.theaditya.co.uk', // For production on your server
+];
+
+const corsOptions = {
+  origin: function (origin, callback) {
+      if (allowedOrigins.indexOf(origin) !== -1 || !origin) {
+          callback(null, { origin: true, credentials: true }); // Reflect origin if it's in the list or is a same-origin request
+      } else {
+          callback(new Error('Not allowed by CORS'), { origin: false });
+      }
+  },
+  credentials: true,
+};
+app.use(cors(corsOptions));
+// app.use(
+//   cors({
+//     origin: process.env.CLIENT_URL,
+//     credentials: true,
+//   })
+// );
 
 // TO ACCEPT JSON DATA FROM BACKEND
 app.use(express.json());
